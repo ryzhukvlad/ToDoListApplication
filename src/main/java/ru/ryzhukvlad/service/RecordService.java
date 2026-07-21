@@ -24,8 +24,7 @@ public class RecordService {
     }
 
     public RecordsContainerDto findAllRecords(String filterMode) {
-        List<Record> records = recordRepository.findAllByStatusAndTitleContainsOrderByIdDesc(RecordStatus.ACTIVE, "to");
-//        List<Record> records = recordRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        List<Record> records = recordRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
         int numberOfDoneRecords = (int) records.stream().filter(record -> record.getStatus() == RecordStatus.DONE).count();
         int numberOfActiveRecords = (int) records.stream().filter(record -> record.getStatus() == RecordStatus.ACTIVE).count();
 
