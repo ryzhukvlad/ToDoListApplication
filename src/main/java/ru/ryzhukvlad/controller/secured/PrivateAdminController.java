@@ -9,8 +9,10 @@ import ru.ryzhukvlad.entity.User;
 import ru.ryzhukvlad.entity.UserRole;
 import ru.ryzhukvlad.service.UserService;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -26,7 +28,6 @@ public class PrivateAdminController {
         User user = userService.getCurrentUser();
 
         model.addAttribute("userName", user.getName());
-        model.addAttribute("userRole", user.getRole().name());
         if (user.isSuperAdmin()) {
             List<User> candidatesToDelete = userService.findAllByRoleIn(Arrays.asList(UserRole.USER, UserRole.ADMIN));
             List<User> candidatesToUpgrade = candidatesToDelete.stream()
