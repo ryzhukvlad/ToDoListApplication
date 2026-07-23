@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/account/**").hasAnyRole(UserRole.USER.name(), UserRole.ADMIN.name(), UserRole.SUPER_ADMIN.name())
                         .requestMatchers("/admin/**").hasAnyRole(UserRole.ADMIN.name(), UserRole.SUPER_ADMIN.name())
                         .requestMatchers("/super-admin/**").hasRole(UserRole.SUPER_ADMIN.name())
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login").permitAll().usernameParameter("email").defaultSuccessUrl("/account")
