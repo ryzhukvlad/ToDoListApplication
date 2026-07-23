@@ -84,4 +84,16 @@ public class User {
     public void setRecords(List<Record> records) {
         this.records = records;
     }
+
+    public boolean isSimpleUser() {
+        return role == UserRole.USER;
+    }
+
+    public boolean isAdmin() {
+        return role == UserRole.ADMIN;
+    }
+
+    public boolean isSuperAdmin() {
+        return role == UserRole.SUPER_ADMIN;
+    }
 }

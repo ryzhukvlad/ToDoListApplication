@@ -3,10 +3,17 @@ package ru.ryzhukvlad.controller.secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.ryzhukvlad.entity.User;
+import ru.ryzhukvlad.entity.UserRole;
 import ru.ryzhukvlad.service.UserService;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Controller
+@RequestMapping("/admin")
 public class PrivateAdminController {
     private final UserService userService;
 
@@ -14,10 +21,45 @@ public class PrivateAdminController {
         this.userService = userService;
     }
 
-    @GetMapping("/admin")
+    @GetMapping
     public String getManagementPage(Model model) {
         User user = userService.getCurrentUser();
+
         model.addAttribute("userName", user.getName());
+        model.addAttribute("userRole", user.getRole().name());
+        if (user.isSuperAdmin()) {
+            List<User> candidatesToDelete = userService.findAllByRoleIn(Arrays.asList(UserRole.USER, UserRole.ADMIN));
+            List<User> candidatesToUpgrade = candidatesToDelete.stream()
+                    .filter(User::isSimpleUser)
+                    .toList();
+            model.addAttribute("candidatesToDelete", candidatesToDelete);
+            model.addAttribute("candidatesToUpgrade", candidatesToUpgrade);
+        } else {
+            List<User> candidatesToDelete = userService.findAllByRoleIn(Collections.singleton(UserRole.USER));
+            model.addAttribute("candidatesToDelete", candidatesToDelete);
+        }
+
         return "private/admin/management-page";
+    }
+
+    @PostMapping("/delete-user")
+    public String deleteUser(int id) {
+        Optional<User> userToBeDeletedOptional = userService.findById(id);
+        if (userToBeDeletedOptional.isEmpty()) {
+            return "redirect:/admin";
+        }
+
+        User userToBeDeleted = userToBeDeletedOptional.get();
+        User currentUser = userService.getCurrentUser();
+
+        if (userToBeDeleted.isSuperAdmin()) {
+            return "redirect:/admin";
+        }
+        if (userToBeDeleted.isAdmin() && !currentUser.isSuperAdmin()) {
+            return "redirect:/admin";
+        }
+
+        userService.deleteById(id);
+        return "redirect:/admin";
     }
 }

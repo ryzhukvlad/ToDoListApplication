@@ -36,7 +36,7 @@ public class RecordService {
         int numberOfActiveRecords = (int) records.stream().filter(record -> record.getStatus() == RecordStatus.ACTIVE).count();
 
         if (filterMode == null || filterMode.isBlank()) {
-            return new RecordsContainerDto(user.getName(), records, numberOfDoneRecords, numberOfActiveRecords);
+            return new RecordsContainerDto(user.getName(), user.getRole(), records, numberOfDoneRecords, numberOfActiveRecords);
         }
 
         String filterModeInUpperCase = filterMode.toUpperCase();
@@ -47,9 +47,9 @@ public class RecordService {
             List<Record> filteredRecords = records.stream()
                     .filter(record -> record.getStatus() == RecordStatus.valueOf(filterModeInUpperCase))
                     .collect(Collectors.toList());
-            return new RecordsContainerDto(user.getName(), filteredRecords, numberOfDoneRecords, numberOfActiveRecords);
+            return new RecordsContainerDto(user.getName(), user.getRole(), filteredRecords, numberOfDoneRecords, numberOfActiveRecords);
         } else {
-            return new RecordsContainerDto(user.getName(), records, numberOfDoneRecords, numberOfActiveRecords);
+            return new RecordsContainerDto(user.getName(), user.getRole(), records, numberOfDoneRecords, numberOfActiveRecords);
         }
     }
 

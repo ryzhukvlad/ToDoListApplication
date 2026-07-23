@@ -37,6 +37,7 @@ public class PrivateAccountController {
         }
         RecordsContainerDto container = recordService.findAllRecords(filterMode);
         model.addAttribute("userName", container.getUserName());
+        model.addAttribute("userRole", container.getUserRole());
         model.addAttribute("records", container.getRecords());
         model.addAttribute("numberOfDoneRecords", container.getNumberOfDoneRecords());
         model.addAttribute("numberOfActiveRecords", container.getNumberOfActiveRecords());

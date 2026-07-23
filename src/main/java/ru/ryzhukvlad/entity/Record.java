@@ -18,7 +18,7 @@ public class Record {
     private RecordStatus status;
 
     @ManyToOne
-    @JoinColumn("user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Record() { }
