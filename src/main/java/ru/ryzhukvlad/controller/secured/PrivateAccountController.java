@@ -1,26 +1,43 @@
 package ru.ryzhukvlad.controller.secured;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.ryzhukvlad.entity.RecordStatus;
+import ru.ryzhukvlad.entity.User;
 import ru.ryzhukvlad.entity.dto.RecordsContainerDto;
 import ru.ryzhukvlad.service.RecordService;
+import ru.ryzhukvlad.service.UserService;
 
 @Controller
 @RequestMapping("/account")
 public class PrivateAccountController {
+    private final UserService userService;
     private final RecordService recordService;
 
     @Autowired
-    public PrivateAccountController(RecordService recordService) {
+    public PrivateAccountController(UserService userService, RecordService recordService) {
+        this.userService = userService;
         this.recordService = recordService;
     }
 
     @GetMapping
-    public String getMainPage(Model model, @RequestParam(name = "filter", required = false) String filterMode) {
+    public String getMainPage(HttpServletRequest request, Model model, @RequestParam(name = "filter", required = false) String filterMode) {
+        HttpSession session = request.getSession();
+        Object counter = session.getAttribute("visitsCounter");
+        if (counter != null) {
+            model.addAttribute("visitsCounter", (Integer) counter);
+            session.setAttribute("visitsCounter", ((Integer) counter + 1));
+        } else {
+            model.addAttribute("visitsCounter", 0);
+            session.setAttribute("visitsCounter", 1);
+        }
+        User user = userService.getCurrentUser();
         RecordsContainerDto container = recordService.findAllRecords(filterMode);
+        model.addAttribute("userName", user.getName());
         model.addAttribute("records", container.getRecords());
         model.addAttribute("numberOfDoneRecords", container.getNumberOfDoneRecords());
         model.addAttribute("numberOfActiveRecords", container.getNumberOfActiveRecords());
