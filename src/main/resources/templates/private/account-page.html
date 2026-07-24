@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="filter-container">
-            <form th:with="filter=${#strings.toLowerCase(param.filter)}" action="/account" method="get" class="filter-form">
+            <form th:with="filter=${#strings.toLowerCase(param.filter)}" th:action="@{/account}" method="get" class="filter-form">
                 <div class="filter-form__input">
                     <input th:checked="${filter != 'active' and filter != 'done'}" type="radio" id="filter-form__status_all" name="filter" value="all">
                     <label for="filter-form__status_all">All</label>
@@ -45,7 +45,7 @@
                     <span th:text="${record.title}" th:classappend="${record.status.name == 'DONE' ? 'record__title_strikethrough' : ''}"></span>
                 </div>
                 <div class="record__controls">
-                    <form th:if="${record.status.name == 'ACTIVE'}" action="/account/make-record-done" method="post" class="record__controls-form">
+                    <form th:if="${record.status.name == 'ACTIVE'}" th:action="@{/account/make-record-done}" method="post" class="record__controls-form">
                         <input th:value="${record.id}" type="hidden" name="id">
                         <input th:value="${#strings.toLowerCase(param.filter)}" type="hidden" name="filter">
                         <button type="submit" class="button_type_approve">
@@ -63,7 +63,7 @@
                             </svg>
                         </button>
                     </form>
-                    <form action="/account/delete-record" method="post" class="record__controls-form">
+                    <form th:action="@{/account/delete-record}" method="post" class="record__controls-form">
                         <input th:value="${record.id}" type="hidden" name="id">
                         <input th:value="${#strings.toLowerCase(param.filter)}" type="hidden" name="filter">
                         <button type="submit" class="button_type_close">
@@ -76,7 +76,7 @@
             </div>
         </div>
         <div class="management-container">
-            <form action="/account/add-record" method="post" class="management-form">
+            <form th:action="/account/add-record" method="post" class="management-form">
                 <input type="text" name="title" placeholder="What needs to be done..." class="management-form__input">
                 <button type="submit" class="management-form__button">Add Record</button>
             </form>

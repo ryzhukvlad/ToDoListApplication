@@ -25,7 +25,7 @@
                     <span th:if="${user.role.name == 'ADMIN'}">(admin)</span>
                 </div>
                 <div class="record__controls">
-                    <form action="/admin/delete-user" method="post" class="record__controls-form">
+                    <form th:action="@{/admin/delete-user}" method="post" class="record__controls-form">
                         <input th:value="${user.id}" type="hidden" name="id">
                         <button type="submit" class="button_type_close">
                             <svg width="24" height="24" viewBox="0 0 24 24">
@@ -44,7 +44,7 @@
             </div>
         </div>
         <div th:with="isCandidatesToUpgradeEmpty=${candidatesToUpgrade == null or candidatesToUpgrade.isEmpty()}" class="form-container">
-            <form action="/super-admin/make-user-admin" method="post" class="form-container__form">
+            <form th:action="@{/super-admin/make-user-admin}" method="post" class="form-container__form">
                 <div class="form-container__input-wrapper">
                     <select name="id" class="form-container__select">
                         <option th:if="${isCandidatesToUpgradeEmpty}" selected disabled>There are no users</option>

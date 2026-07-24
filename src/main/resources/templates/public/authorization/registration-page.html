@@ -12,7 +12,7 @@
             <h2 class="header-container__text">Registration</h2>
         </div>
         <div class="form-container">
-            <form action="/registration" method="post" class="form-container__form">
+            <form th:action="@{/registration}" method="post" class="form-container__form">
                 <div class="form-container__input-wrapper">
                     <input type="text" name="name" placeholder="Enter your name" class="form-container__input" required>
                 </div>
