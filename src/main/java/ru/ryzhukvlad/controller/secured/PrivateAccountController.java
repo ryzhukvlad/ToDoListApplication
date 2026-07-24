@@ -35,10 +35,10 @@ public class PrivateAccountController {
             session.setAttribute("visitsCounter", 1);
         }
         RecordsContainerDto container = recordService.findAllRecords(filterMode);
-        model.addAttribute("userName", container.getUserName());
-        model.addAttribute("records", container.getRecords());
-        model.addAttribute("numberOfDoneRecords", container.getNumberOfDoneRecords());
-        model.addAttribute("numberOfActiveRecords", container.getNumberOfActiveRecords());
+        model.addAttribute("userName", container.userName());
+        model.addAttribute("records", container.records());
+        model.addAttribute("numberOfDoneRecords", container.numberOfDoneRecords());
+        model.addAttribute("numberOfActiveRecords", container.numberOfActiveRecords());
         return "private/account-page";
     }
 
